@@ -1,15 +1,17 @@
 import os
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
+DEBUG = bool(os.getenv('DEBUG', default=1))
 
-DEBUG = bool(os.environ.get('DEBUG', default=0))
-
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(' ')
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS", default='localhost').split(' ')
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
