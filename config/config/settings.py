@@ -1,17 +1,19 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 from django.core.management.utils import get_random_secret_key
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = bool(os.getenv('DEBUG', default=1))
+DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = os.getenv(
-    "DJANGO_ALLOWED_HOSTS", default='cookbook-gb.onrender.com').split(' ')
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(' ')
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
