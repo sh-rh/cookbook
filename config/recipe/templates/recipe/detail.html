@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+  {{ recipe.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 border border-gray-300 rounded-xl">
+    <h2 class="text-2xl text-center">{{ recipe.name }}</h2>
+  </div>
+  <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 border border-gray-300 rounded-xl">
+    <div>
+      <img src="{{ recipe.image.url }}" class="rounded-xl mx-auto img-fluid" style="width: 3200px;object-fit:cover" />
+    </div>
+
+    <div class="p-6">
+      <h2 class="text-xl">Время приготовления: {{ recipe.cooking_time }}</h2>
+      <h2 class="text-xl py-4 text-gray-800">Описание:</h2>
+      <p class="text-l text-gray-700">{{ recipe.description }}</p>
+      <h2 class="text-xl py-4 text-gray-800">Шаги приготовления:</h2>
+      <p class="text-l text-gray-700">{{ recipe.steps }}</p>
+    </div>
+  </div>
+
+  <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 border border-gray-300 rounded-xl">
+    <p class="text-l text-gray-700 pb-6 px-3">Автор: @{{ recipe.created_by }}</p>
+    {% if request.user == recipe.created_by %}
+      {# prettier-ignore #}
+      <a href="{% url 'recipe:edit_recipe' recipe.id %}" class="px-3 py-2 text-lg font-semibold bg-green-700 text-white rounded-xl">Изменить</a>
+      {# prettier-ignore #}
+      <a href="{% url 'recipe:delete_recipe' recipe.id %}" class="px-3 py-2 text-lg font-semibold bg-red-700 text-white rounded-xl">УДАЛИТЬ</a>
+    {% else %}
+      {# prettier-ignore #}
+      <a href="{% url 'chat:new' recipe.id %}" class="px-3 py-2 text-lg font-semibold bg-green-700 text-white rounded-xl">Написать автору</a>
+    {% endif %}
+  </div>
+  <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 border border-gray-300 rounded-xl">
+    <form method="post" action="." class="mt-6">
+      {% csrf_token %}
+
+      {{ comment_form.as_p }}
+
+      <button class="px-3 py-2 text-lg font-semibold bg-green-700 text-white rounded-xl hover:bg-gray-500">Комментировать</button>
+    </form>
+    {% for comment in comments %}
+      <div class="p-2">
+        {# prettier-ignore #}
+        <div class="p-4 flex {% if comment.created_by == request.user %}bg-green-200{% else %}bg-white{% endif %} rounded-xl border border-gray-300">
+        <div>
+          <p class="mb-2">
+            <strong>{{ comment.created_by.username }}</strong> @ {{ comment.created_at }}
+          </p>
+          <p>{{ comment.content }}</p>
+        </div>
+      </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
