@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 DEBUG = bool(os.getenv('DEBUG', default=1))
 
 ALLOWED_HOSTS = os.getenv(
-    "DJANGO_ALLOWED_HOSTS", default='localhost').split(' ')
+    "DJANGO_ALLOWED_HOSTS", default='cookbook-gb.onrender.com').split(' ')
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
